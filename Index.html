@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Administrasi Ujian - SMP Muhammadiyah 2 Depok</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1A365D',
+                        secondary: '#2B6CB0',
+                        accent: '#4299E1',
+                        'sidebar-dark': '#0F172A',
+                        'sidebar-light': '#1E293B',
+                        // Card colors based on image
+                        'card-blue-bg': '#F0F7FF',
+                        'card-blue-border': '#BFDBFE',
+                        'card-blue-icon': '#3B82F6',
+                        
+                        'card-green-bg': '#F0FDF4',
+                        'card-green-border': '#BBF7D0',
+                        'card-green-icon': '#22C55E',
+                        
+                        'card-orange-bg': '#FFF7ED',
+                        'card-orange-border': '#FED7AA',
+                        'card-orange-icon': '#F97316',
+                        
+                        'card-purple-bg': '#FAF5FF',
+                        'card-purple-border': '#E9D5FF',
+                        'card-purple-icon': '#8B5CF6',
+                        
+                        'card-teal-bg': '#F0FDFA',
+                        'card-teal-border': '#99F6E4',
+                        'card-teal-icon': '#14B8A6',
+                        
+                        'card-red-bg': '#FEF2F2',
+                        'card-red-border': '#FECACA',
+                        'card-red-icon': '#EF4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for subtle background patterns in cards */
+        .card-pattern {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            opacity: 0.2;
+            font-size: 4rem;
+            pointer-events: none;
+        }
+        
+        /* Top header gradient */
+        .header-gradient {
+            background: linear-gradient(90deg, #1A365D 0%, #2B6CB0 50%, #4299E1 100%);
+        }
+
+        /* Sidebar active state */
+        .sidebar-item-active {
+            background-color: #3B82F6; /* Tailwind blue-500 */
+            border-radius: 0.5rem;
+        }
+        
+        /* Bottom curve for sidebar */
+        .sidebar-curve {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,50 C30,100 70,0 100,50 L100,100 L0,100 Z" fill="%232B6CB0" opacity="0.5"/><path d="M0,70 C40,110 60,10 100,60 L100,100 L0,100 Z" fill="%234299E1" opacity="0.8"/></svg>') no-repeat bottom center;
+            background-size: cover;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans h-screen flex flex-col overflow-hidden">
+
+    <!-- Top Header -->
+    <header class="header-gradient text-white shadow-md relative z-20 flex-shrink-0">
+        <div class="px-6 py-4 flex justify-between items-center">
+            
+            <!-- Left: Logo & School Name -->
+            <div class="flex items-center space-x-6">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEitD0PNHyv9sXz7E8l4nRMtqccsnDUlcrxgX0kHCtec90z2Zf7Ydl0FxYqgD6-TUllq8hRnEGreUWb2O2aTxa6yTrpk42lvEEqVRW-Gtr-byrWW_kf5dXRDa0bCHXKPaZ1y-EB6Uw-78SsM8b6ZJmZLU94IVUHDiay8RHAe9YxdS7DuCYB3Zc3kYbnU_NNT/s1600/logo%20sekolah.png" 
+                     alt="Logo SMP Muhammadiyah 2 Depok" 
+                     class="w-14 h-14 object-contain bg-white rounded-full p-1 shadow-inner flex-shrink-0"
+                     onerror="this.onerror=null; this.src='https://placehold.co/100x100/1A365D/FFF?text=SMP+M2';">
+                
+                <div class="border-r border-blue-300 pr-6 mr-2 hidden md:block">
+                    <h1 class="text-xl font-bold tracking-wide">SMP MUHAMMADIYAH 2 DEPOK</h1>
+                    <p class="text-sm text-blue-100 italic">Berakhlaq • Berkemajuan • Berprestasi</p>
+                </div>
+                
+                <!-- Middle: Portal Title -->
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight">Portal Administrasi Ujian</h2>
+                    <p class="text-sm text-blue-100">Mudah, Cepat, Terintegrasi</p>
+                </div>
+            </div>
+
+            <!-- Right: User Profile -->
+            <div class="flex items-center space-x-3">
+                <button class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 transition px-4 py-2 rounded-full border border-white/20">
+                    <div class="w-8 h-8 bg-white text-primary rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-sm"></i>
+                    </div>
+                    <span class="font-medium hidden sm:block">Admin Ujian</span>
+                    <i class="fas fa-chevron-down text-xs hidden sm:block"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-sidebar-dark text-white flex flex-col relative shadow-xl z-10 hidden md:flex flex-shrink-0">
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto z-10">
+                <!-- Beranda (Active) -->
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 sidebar-item-active transition duration-200">
+                    <i class="fas fa-home w-6 text-center text-lg"></i>
+                    <span class="font-medium">Beranda</span>
+                </a>
+                
+                <!-- Jadwal -->
+                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSo4FkjbOvP2uSrL7Vp494YEqmgtb3hHevyUNqMcFVKqEBpCPF-o6Gtklg5uqOlODr4m9r8E9iyksZv/pubhtml?gid=54009837&single=true" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="far fa-calendar-alt w-6 text-center text-lg"></i>
+                    <span class="font-medium">Jadwal</span>
+                </a>
+                
+                <!-- Token Ujian -->
+                <a href="https://script.google.com/macros/s/AKfycbw-3bp03l95Nrdx9iYu9akKknOS9cjDwGQXEtMd7jZnjA1ysP7obGlzevj8h7lLfFWA/exec" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="fas fa-key w-6 text-center text-lg"></i>
+                    <span class="font-medium">Token Ujian</span>
+                </a>
+                
+                <!-- Daftar Hadir Pengawas -->
+                <a href="https://docs.google.com/spreadsheets/d/1xFsr_7eMoklb6R6IoH4NVQdY3dHRWy1IJsWiOpLtMLg/edit?gid=2141477727#gid=2141477727" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="fas fa-user-tie w-6 text-center text-lg"></i>
+                    <span class="font-medium">Daftar Hadir Pengawas</span>
+                </a>
+                
+                <!-- Daftar Hadir Peserta -->
+                <a href="https://docs.google.com/spreadsheets/d/1vtl3XV9l4mNWyPgOWsbn3ru781udxuzMHle_Gt2i5rw/edit?gid=1538048607#gid=1538048607" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="fas fa-users w-6 text-center text-lg"></i>
+                    <span class="font-medium">Daftar Hadir Peserta</span>
+                </a>
+                
+                <!-- Berita Acara -->
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSejgf9-a0vRN6CX32hhawC7kMJii5RHWIulXjyijyKDCFq3rA/viewform" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="far fa-file-alt w-6 text-center text-lg"></i>
+                    <span class="font-medium">Berita Acara</span>
+                </a>
+                
+                <!-- Rekap Hasil Ujian -->
+                <button onclick="openRekapModal()" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white text-left">
+                    <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
+                    <span class="font-medium">Rekap Hasil Ujian</span>
+                </button>
+            </nav>
+
+            <!-- Bottom decorative curve & motto -->
+            <div class="sidebar-curve"></div>
+            <div class="p-6 z-10 mb-8">
+                <p class="text-sm italic text-blue-200 mb-1">Sukses Ujian,</p>
+                <p class="text-sm font-semibold text-white">Menuju Masa Depan Gemilang</p>
+                <div class="w-12 h-1 bg-blue-500 mt-2 rounded"></div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-50 p-6 lg:p-10 relative">
+            
+            <!-- Dashboard Header (Welcome & Date) -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-1">Selamat Datang</h1>
+                    <p class="text-gray-600">di Portal Administrasi Ujian SMP Muhammadiyah 2 Depok</p>
+                    <p class="text-sm text-gray-500 mt-1">Kelola seluruh informasi dan administrasi ujian dalam satu platform.</p>
+                </div>
+                
+                <!-- Date Widget -->
+                <div class="bg-blue-50 border border-blue-100 rounded-xl px-6 py-4 flex items-center space-x-4 shadow-sm">
+                    <div class="bg-blue-100 text-blue-600 p-3 rounded-lg">
+                        <i class="far fa-calendar-check text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Hari ini</p>
+                        <p class="text-gray-800 font-medium" id="current-date">Selasa, 23 September 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                
+                <!-- Card 1: Jadwal -->
+                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSo4FkjbOvP2uSrL7Vp494YEqmgtb3hHevyUNqMcFVKqEBpCPF-o6Gtklg5uqOlODr4m9r8E9iyksZv/pubhtml?gid=54009837&single=true" target="_blank" rel="noopener noreferrer" class="bg-card-blue-bg border border-card-blue-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 block">
+                    <i class="far fa-calendar-alt card-pattern text-card-blue-icon"></i>
+                    
+                    <div class="w-14 h-14 bg-card-blue-icon rounded-full flex items-center justify-center text-white text-2xl mb-6 shadow-sm">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Jadwal</h3>
+                    <p class="text-gray-600 mb-6 text-sm">Lihat dan kelola jadwal pelaksanaan ujian.</p>
+                    
+                    <div class="absolute bottom-6 right-6">
+                        <div class="w-10 h-10 bg-card-blue-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 2: Token Ujian -->
+                <a href="https://script.google.com/macros/s/AKfycbw-3bp03l95Nrdx9iYu9akKknOS9cjDwGQXEtMd7jZnjA1ysP7obGlzevj8h7lLfFWA/exec" target="_blank" rel="noopener noreferrer" class="bg-card-green-bg border border-card-green-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 block">
+                    <i class="fas fa-key card-pattern text-card-green-icon"></i>
+                    
+                    <div class="w-14 h-14 bg-card-green-icon rounded-full flex items-center justify-center text-white text-2xl mb-6 shadow-sm">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Token Ujian</h3>
+                    <p class="text-gray-600 mb-6 text-sm w-4/5">Kelola token untuk akses ujian peserta.</p>
+                    
+                    <div class="absolute bottom-6 right-6">
+                        <div class="w-10 h-10 bg-card-green-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 3: Daftar Hadir Pengawas -->
+                <a href="https://docs.google.com/spreadsheets/d/1xFsr_7eMoklb6R6IoH4NVQdY3dHRWy1IJsWiOpLtMLg/edit?gid=2141477727#gid=2141477727" target="_blank" rel="noopener noreferrer" class="bg-card-orange-bg border border-card-orange-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 block">
+                    <i class="fas fa-clipboard-user card-pattern text-card-orange-icon"></i>
+                    
+                    <div class="w-14 h-14 bg-card-orange-icon rounded-full flex items-center justify-center text-white text-2xl mb-6 shadow-sm">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Daftar Hadir Pengawas</h3>
+                    <p class="text-gray-600 mb-6 text-sm w-4/5">Lihat dan kelola daftar hadir pengawas ujian.</p>
+                    
+                    <div class="absolute bottom-6 right-6">
+                        <div class="w-10 h-10 bg-card-orange-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 4: Daftar Hadir Peserta -->
+                <a href="https://docs.google.com/spreadsheets/d/1vtl3XV9l4mNWyPgOWsbn3ru781udxuzMHle_Gt2i5rw/edit?gid=1538048607#gid=1538048607" target="_blank" rel="noopener noreferrer" class="bg-card-purple-bg border border-card-purple-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 block">
+                    <i class="fas fa-users card-pattern text-card-purple-icon"></i>
+                    
+                    <div class="w-14 h-14 bg-card-purple-icon rounded-full flex items-center justify-center text-white text-2xl mb-6 shadow-sm">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Daftar Hadir Peserta</h3>
+                    <p class="text-gray-600 mb-6 text-sm w-4/5">Lihat dan kelola daftar hadir peserta ujian.</p>
+                    
+                    <div class="absolute bottom-6 right-6">
+                        <div class="w-10 h-10 bg-card-purple-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 5: Berita Acara -->
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSejgf9-a0vRN6CX32hhawC7kMJii5RHWIulXjyijyKDCFq3rA/viewform" target="_blank" rel="noopener noreferrer" class="bg-card-teal-bg border border-card-teal-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 block">
+                    <i class="far fa-file-alt card-pattern text-card-teal-icon"></i>
+                    
+                    <div class="w-14 h-14 bg-card-teal-icon rounded-full flex items-center justify-center text-white text-2xl mb-6 shadow-sm">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Berita Acara</h3>
+                    <p class="text-gray-600 mb-6 text-sm w-4/5">Buat dan kelola berita acara pelaksanaan ujian.</p>
+                    
+                    <div class="absolute bottom-6 right-6">
+                        <div class="w-10 h-10 bg-card-teal-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 6: Rekap Hasil Ujian (Akses per Kelas) -->
+                <div class="bg-card-red-bg border border-card-red-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
+                    <i class="fas fa-chart-line card-pattern text-card-red-icon"></i>
+                    
+                    <div>
+                        <div class="w-14 h-14 bg-card-red-icon rounded-full flex items-center justify-center text-white text-2xl mb-4 shadow-sm">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold text-gray-800 mb-1">Rekap Hasil Ujian</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Lihat rekap hasil ujian sesuai jenjang kelas:</p>
+                    </div>
+
+                    <!-- Action Buttons for Kelas 7, 8, 9 -->
+                    <div class="grid grid-cols-3 gap-2 mt-2 z-10">
+                        <a href="https://shorturl.at/ZeNl9" target="_blank" rel="noopener noreferrer" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-2 rounded-xl text-xs text-center transition flex flex-col items-center justify-center shadow-sm">
+                            <span class="font-bold">Kelas 7</span>
+                            <i class="fas fa-external-link-alt mt-1 text-[10px] opacity-80"></i>
+                        </a>
+                        <a href="https://shorturl.at/LmDTo" target="_blank" rel="noopener noreferrer" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-2 rounded-xl text-xs text-center transition flex flex-col items-center justify-center shadow-sm">
+                            <span class="font-bold">Kelas 8</span>
+                            <i class="fas fa-external-link-alt mt-1 text-[10px] opacity-80"></i>
+                        </a>
+                        <a href="https://shorturl.at/60fCh" target="_blank" rel="noopener noreferrer" class="bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-2 rounded-xl text-xs text-center transition flex flex-col items-center justify-center shadow-sm">
+                            <span class="font-bold">Kelas 9</span>
+                            <i class="fas fa-external-link-alt mt-1 text-[10px] opacity-80"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Simple Footer inside main area -->
+            <div class="mt-12 text-center text-sm text-gray-400">
+                &copy; <span id="year"></span> SMP Muhammadiyah 2 Depok. Sistem Portal Ujian.
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Modal Rekap Hasil Ujian -->
+    <div id="rekap-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300" id="rekap-modal-content">
+            <div class="flex justify-between items-center mb-4 border-b pb-3">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-red-100 text-red-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-chart-bar text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">Rekap Hasil Ujian</h3>
+                        <p class="text-xs text-gray-500">Pilih jenjang kelas yang ingin dibuka</p>
+                    </div>
+                </div>
+                <button onclick="closeRekapModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-3 py-2">
+                <a href="https://shorturl.at/ZeNl9" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 transition group">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-lg bg-red-500 text-white font-bold flex items-center justify-center text-sm">7</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Rekap Hasil Ujian Kelas 7</p>
+                            <p class="text-xs text-gray-500">Akses dokumen rekapitulasi nilai</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right text-red-500 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+
+                <a href="https://shorturl.at/LmDTo" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 transition group">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-lg bg-red-500 text-white font-bold flex items-center justify-center text-sm">8</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Rekap Hasil Ujian Kelas 8</p>
+                            <p class="text-xs text-gray-500">Akses dokumen rekapitulasi nilai</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right text-red-500 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+
+                <a href="https://shorturl.at/60fCh" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-xl hover:bg-red-100 transition group">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-lg bg-red-500 text-white font-bold flex items-center justify-center text-sm">9</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Rekap Hasil Ujian Kelas 9</p>
+                            <p class="text-xs text-gray-500">Akses dokumen rekapitulasi nilai</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-arrow-right text-red-500 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <div class="mt-4 pt-3 border-t text-right">
+                <button onclick="closeRekapModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRekapModal() {
+            const modal = document.getElementById('rekap-modal');
+            const content = document.getElementById('rekap-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeRekapModal() {
+            const modal = document.getElementById('rekap-modal');
+            const content = document.getElementById('rekap-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Set dynamic date in Indonesian format
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateElement = document.getElementById('current-date');
+            const yearElement = document.getElementById('year');
+            
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const now = new Date(); 
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            dateElement.textContent = `${dayName}, ${date} ${monthName} ${year}`;
+            yearElement.textContent = year;
+        });
+    </script>
+</body>
+</html>
