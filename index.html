@@ -198,6 +198,12 @@
                     <i class="far fa-calendar-alt w-5 text-center text-base text-blue-400"></i>
                     <span class="font-medium text-sm">Jadwal Ujian</span>
                 </a>
+
+                <!-- Link: Kartu Ujian -->
+                <a id="link-nav-kartu" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-2.5 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="fas fa-id-card w-5 text-center text-base text-indigo-400"></i>
+                    <span class="font-medium text-sm">Kartu Ujian</span>
+                </a>
                 
                 <!-- Link: Token Ujian -->
                 <a id="link-nav-token" href="#" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 px-4 py-2.5 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
@@ -298,7 +304,30 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Token Ujian -->
+                    <!-- Card 2: Kartu Ujian -->
+                    <div class="bg-card-indigo-bg border border-card-indigo-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
+                        <i class="fas fa-id-card card-pattern text-card-indigo-icon"></i>
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-13 h-13 p-3 bg-card-indigo-icon rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <button onclick="quickEditLink('kartu')" class="btn-edit-overlay hidden bg-white/80 hover:bg-white text-indigo-600 p-2 rounded-lg text-xs font-semibold shadow border border-indigo-200 transition">
+                                    <i class="fas fa-pen mr-1"></i> Edit
+                                </button>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">Kartu Ujian</h3>
+                            <p class="text-gray-600 mb-6 text-sm">Cetak dan distribusikan kartu peserta ujian untuk seluruh siswa.</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-xs font-semibold text-indigo-700 bg-indigo-100 px-3 py-1 rounded-full">Cetak Kartu</span>
+                            <a id="card-link-kartu" href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 bg-card-indigo-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Token Ujian -->
                     <div class="bg-card-green-bg border border-card-green-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
                         <i class="fas fa-key card-pattern text-card-green-icon"></i>
                         <div>
@@ -544,7 +573,7 @@
                         </div>
                         <div>
                             <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Rentang Nilai</p>
-                            <p class="text-sm font-bold text-gray-800"><span text-emerald-600 id="kpi-max">Max: 98</span> | <span text-rose-600 id="kpi-min">Min: 48</span></p>
+                            <p class="text-sm font-bold text-gray-800"><span class="text-emerald-600" id="kpi-max">Max: 98</span> | <span class="text-rose-600" id="kpi-min">Min: 48</span></p>
                         </div>
                     </div>
                 </div>
@@ -773,6 +802,11 @@
                     </div>
 
                     <div>
+                        <label class="block text-gray-600 font-medium mb-1">Kartu Ujian (Google Drive / Web App / Sheet)</label>
+                        <input type="url" id="input-link-kartu" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                    </div>
+
+                    <div>
                         <label class="block text-gray-600 font-medium mb-1">Token Ujian (App Script / Web App)</label>
                         <input type="url" id="input-link-token" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                     </div>
@@ -840,6 +874,7 @@
             logoUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEitD0PNHyv9sXz7E8l4nRMtqccsnDUlcrxgX0kHCtec90z2Zf7Ydl0FxYqgD6-TUllq8hRnEGreUWb2O2aTxa6yTrpk42lvEEqVRW-Gtr-byrWW_kf5dXRDa0bCHXKPaZ1y-EB6Uw-78SsM8b6ZJmZLU94IVUHDiay8RHAe9YxdS7DuCYB3Zc3kYbnU_NNT/s1600/logo%20sekolah.png",
             links: {
                 jadwal: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSo4FkjbOvP2uSrL7Vp494YEqmgtb3hHevyUNqMcFVKqEBpCPF-o6Gtklg5uqOlODr4m9r8E9iyksZv/pubhtml?gid=54009837&single=true",
+                kartu: "https://ekosantoso411-pixel.github.io/kartu-ujian/",
                 token: "https://script.google.com/macros/s/AKfycbw-3bp03l95Nrdx9iYu9akKknOS9cjDwGQXEtMd7jZnjA1ysP7obGlzevj8h7lLfFWA/exec",
                 pengawas: "https://docs.google.com/spreadsheets/d/1xFsr_7eMoklb6R6IoH4NVQdY3dHRWy1IJsWiOpLtMLg/edit?gid=2141477727#gid=2141477727",
                 peserta: "https://docs.google.com/spreadsheets/d/1vtl3XV9l4mNWyPgOWsbn3ru781udxuzMHle_Gt2i5rw/edit?gid=1538048607#gid=1538048607",
@@ -958,6 +993,7 @@
             
             // Sidebar links
             document.getElementById('link-nav-jadwal').href = l.jadwal;
+            if (document.getElementById('link-nav-kartu')) document.getElementById('link-nav-kartu').href = l.kartu || '#';
             document.getElementById('link-nav-token').href = l.token;
             document.getElementById('link-nav-pengawas').href = l.pengawas;
             document.getElementById('link-nav-peserta').href = l.peserta;
@@ -965,6 +1001,7 @@
 
             // Card links
             document.getElementById('card-link-jadwal').href = l.jadwal;
+            if (document.getElementById('card-link-kartu')) document.getElementById('card-link-kartu').href = l.kartu || '#';
             document.getElementById('card-link-token').href = l.token;
             document.getElementById('card-link-pengawas').href = l.pengawas;
             document.getElementById('card-link-peserta').href = l.peserta;
@@ -1070,16 +1107,6 @@
             document.getElementById('kpi-remedial').textContent = data.remedial;
             document.getElementById('kpi-max').textContent = `Max: ${data.maxScore}`;
             document.getElementById('kpi-min').textContent = `Min: ${data.minScore}`;
-
-            // Chart Colors
-            const colors = {
-                blue: '#3B82F6',
-                emerald: '#10B981',
-                purple: '#8B5CF6',
-                rose: '#EF4444',
-                amber: '#F59E0B',
-                cyan: '#06B6D4'
-            };
 
             // 2. Chart Mapel (Bar Chart)
             const ctxMapel = document.getElementById('chart-mapel').getContext('2d');
@@ -1272,6 +1299,7 @@
 
             const l = currentConfig.links;
             document.getElementById('input-link-jadwal').value = l.jadwal;
+            if (document.getElementById('input-link-kartu')) document.getElementById('input-link-kartu').value = l.kartu || '';
             document.getElementById('input-link-token').value = l.token;
             document.getElementById('input-link-pengawas').value = l.pengawas;
             document.getElementById('input-link-peserta').value = l.peserta;
@@ -1309,6 +1337,7 @@
 
             currentConfig.links = {
                 jadwal: document.getElementById('input-link-jadwal').value.trim(),
+                kartu: document.getElementById('input-link-kartu') ? document.getElementById('input-link-kartu').value.trim() : (currentConfig.links.kartu || ''),
                 token: document.getElementById('input-link-token').value.trim(),
                 pengawas: document.getElementById('input-link-pengawas').value.trim(),
                 peserta: document.getElementById('input-link-peserta').value.trim(),
