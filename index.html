@@ -10,8 +10,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chart.js for Interactive Dashboard Analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         tailwind.config = {
@@ -54,7 +52,11 @@
                         
                         'card-indigo-bg': '#EEF2FF',
                         'card-indigo-border': '#C7D2FE',
-                        'card-indigo-icon': '#6366F1'
+                        'card-indigo-icon': '#6366F1',
+
+                        'card-cyan-bg': '#ECFEFF',
+                        'card-cyan-border': '#A5F3FC',
+                        'card-cyan-icon': '#06B6D4'
                     }
                 }
             }
@@ -183,19 +185,10 @@
         <!-- Sidebar Navigation -->
         <aside id="sidebar" class="w-64 bg-sidebar-dark text-white flex flex-col relative shadow-xl z-30 transition-all duration-300 absolute md:relative inset-y-0 left-0 transform -translate-x-full md:translate-x-0 flex-shrink-0">
             <nav class="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto z-10">
-                <!-- Tab 1: Beranda -->
-                <button onclick="switchTab('beranda')" id="nav-beranda" class="w-full flex items-center space-x-3 px-4 py-3 sidebar-item-active transition duration-200 text-left">
+                <!-- Beranda -->
+                <button onclick="closeMobileSidebarIfOpen()" id="nav-beranda" class="w-full flex items-center space-x-3 px-4 py-3 sidebar-item-active transition duration-200 text-left">
                     <i class="fas fa-home w-5 text-center text-lg"></i>
                     <span class="font-medium">Beranda</span>
-                </button>
-                
-                <!-- Tab 2: Dashboard Statistik & Grafik -->
-                <button onclick="switchTab('statistik')" id="nav-statistik" class="w-full flex items-center justify-between px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white text-left">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-chart-pie w-5 text-center text-lg text-emerald-400"></i>
-                        <span class="font-medium">Statistik & Grafik</span>
-                    </div>
-                    <span class="bg-emerald-500 text-white text-[10px] uppercase font-bold px-1.5 py-0.5 rounded">Baru</span>
                 </button>
 
                 <div class="pt-3 pb-1 px-4 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Tautan Cepat</div>
@@ -241,6 +234,12 @@
                     <i class="fas fa-chart-bar w-5 text-center text-base text-red-400"></i>
                     <span class="font-medium text-sm">Rekap Hasil Ujian</span>
                 </button>
+
+                <!-- Link: Pantau Ujian -->
+                <a id="link-nav-pantau" href="#" target="_blank" rel="noopener noreferrer" onclick="handlePantauLinkClick(event)" class="flex items-center space-x-3 px-4 py-2.5 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white">
+                    <i class="fas fa-desktop w-5 text-center text-base text-cyan-400"></i>
+                    <span class="font-medium text-sm">Pantau Ujian</span>
+                </a>
             </nav>
 
             <!-- Bottom decorative curve & motto -->
@@ -258,7 +257,7 @@
         <!-- Main Scrollable Body Container -->
         <main class="flex-1 overflow-y-auto bg-gray-50 p-4 lg:p-8 relative">
             
-            <!-- VIEW 1: BERANDA PORTAL (Grid View) -->
+            <!-- BERANDA PORTAL (Grid View) -->
             <div id="view-beranda" class="space-y-6">
                 
                 <!-- Header Banner / Welcome Area -->
@@ -273,7 +272,7 @@
                         </div>
                         <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mt-2">Selamat Datang</h1>
                         <p class="text-gray-600 text-sm lg:text-base">di Portal Administrasi Ujian <span id="welcome-school-name" class="font-semibold text-gray-700">SMP Muhammadiyah 2 Depok</span></p>
-                        <p class="text-xs text-gray-500 mt-1">Kelola seluruh kebutuhan administrasi, link layanan, dan pantau rekapitulasi nilai ujian secara cepat.</p>
+                        <p class="text-xs text-gray-500 mt-1">Kelola seluruh kebutuhan administrasi, link layanan, dan pantau pelaksanaan ujian secara cepat.</p>
                     </div>
                     
                     <!-- Real-time Date Widget -->
@@ -462,215 +461,29 @@
                         </div>
                     </div>
 
-                </div>
-
-                <!-- Banner shortcut to Analytics -->
-                <div class="bg-gradient-to-r from-slate-900 via-indigo-900 to-blue-900 text-white p-6 rounded-2xl shadow-md flex flex-col md:flex-row items-center justify-between gap-4 mt-8">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center text-2xl border border-emerald-500/30">
-                            <i class="fas fa-chart-pie"></i>
-                        </div>
+                    <!-- Card 8: Pantau Ujian -->
+                    <div class="bg-card-cyan-bg border border-card-cyan-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
+                        <i class="fas fa-desktop card-pattern text-card-cyan-icon"></i>
                         <div>
-                            <h3 class="text-lg font-bold">Analisis Statistik & Hasil Ujian Realtime</h3>
-                            <p class="text-xs text-blue-200">Lihat grafik ketuntasan KKM, rata-rata mapel, sebaran predikat nilai, dan statistik peserta.</p>
-                        </div>
-                    </div>
-                    <button onclick="switchTab('statistik')" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-semibold rounded-xl transition shadow flex items-center space-x-2 whitespace-nowrap">
-                        <span>Buka Dashboard Grafik</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-
-            </div>
-
-            <!-- VIEW 2: DASHBOARD STATISTIK & GRAFIK (Analytics View) -->
-            <div id="view-statistik" class="space-y-6 hidden">
-                
-                <!-- Filter Control Bar -->
-                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-md">Analisis Visual</span>
-                            <span class="text-xs text-gray-500">Standar KKM Sekolah: <b>75.0</b></span>
-                        </div>
-                        <h2 class="text-2xl font-bold text-gray-800 mt-1">Dashboard Statistik & Grafik</h2>
-                        <p class="text-xs text-gray-500">Visualisasi data capaian hasil ujian siswa secara interaktif.</p>
-                    </div>
-
-                    <!-- Dropdown Filters -->
-                    <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
-                        <!-- Filter Kelas -->
-                        <div class="flex flex-col text-xs font-medium">
-                            <label class="text-gray-500 mb-1">Filter Kelas:</label>
-                            <select id="filter-kelas" onchange="updateDashboardAnalytics()" class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-800 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="semua">Semua Jenjang (Kelas 7, 8 & 9)</option>
-                                <option value="7">Kelas 7</option>
-                                <option value="8">Kelas 8</option>
-                                <option value="9">Kelas 9</option>
-                            </select>
-                        </div>
-
-                        <!-- Filter Periode Ujian -->
-                        <div class="flex flex-col text-xs font-medium">
-                            <label class="text-gray-500 mb-1">Periode Ujian:</label>
-                            <select id="filter-periode" onchange="updateDashboardAnalytics()" class="bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-800 font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="pts_ganjil">PTS Semester Ganjil 2026/2027</option>
-                                <option value="pas_ganjil">PAS Semester Ganjil 2026/2027</option>
-                                <option value="pts_genap">PTS Semester Genap 2026/2027</option>
-                            </select>
-                        </div>
-
-                        <!-- Refresh -->
-                        <div class="flex items-end h-full pt-4">
-                            <button onclick="updateDashboardAnalytics(true)" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition flex items-center space-x-1 shadow-sm">
-                                <i class="fas fa-sync-alt"></i>
-                                <span class="hidden sm:inline">Refresh Data</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- KPI Metric Cards Row -->
-                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Total Peserta</p>
-                            <p class="text-xl font-extrabold text-gray-800" id="kpi-total-siswa">288</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Rata-Rata Sekolah</p>
-                            <p class="text-xl font-extrabold text-indigo-600" id="kpi-rata-rata">81.4</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Ketuntasan KKM</p>
-                            <p class="text-xl font-extrabold text-emerald-600" id="kpi-ketuntasan">87.5%</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Siswa Remedial</p>
-                            <p class="text-xl font-extrabold text-rose-600" id="kpi-remedial">36</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3 col-span-2 md:col-span-1">
-                        <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Rentang Nilai</p>
-                            <p class="text-sm font-bold text-gray-800"><span class="text-emerald-600" id="kpi-max">Max: 98</span> | <span class="text-rose-600" id="kpi-min">Min: 48</span></p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charts Grid Area -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-gray-800">Rata-Rata Nilai per Mata Pelajaran</h3>
-                                <p class="text-xs text-gray-500">Perbandingan terhadap Garis KKM (75)</p>
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="w-13 h-13 p-3 bg-card-cyan-icon rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
+                                    <i class="fas fa-desktop"></i>
+                                </div>
+                                <button onclick="quickEditLink('pantau')" class="btn-edit-overlay hidden bg-white/80 hover:bg-white text-cyan-700 p-2 rounded-lg text-xs font-semibold shadow border border-cyan-200 transition">
+                                    <i class="fas fa-pen mr-1"></i> Edit
+                                </button>
                             </div>
-                            <span class="text-xs font-semibold px-2 py-1 bg-blue-50 text-blue-600 rounded-md">8 Mapel</span>
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">Pantau Ujian</h3>
+                            <p class="text-gray-600 mb-6 text-sm">Pantau jalannya pelaksanaan ujian dan status peserta secara langsung.</p>
                         </div>
-                        <div class="relative h-64 w-full">
-                            <canvas id="chart-mapel"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-gray-800">Sebaran Predikat Capaian Siswa</h3>
-                                <p class="text-xs text-gray-500">Sangat Baik (A), Baik (B), Cukup (C), Remedial (D)</p>
-                            </div>
-                            <span class="text-xs font-semibold px-2 py-1 bg-purple-50 text-purple-600 rounded-md">Persentase</span>
-                        </div>
-                        <div class="relative h-64 w-full flex justify-center items-center">
-                            <canvas id="chart-predikat"></canvas>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-xs font-semibold text-cyan-700 bg-cyan-100 px-3 py-1 rounded-full">Monitoring</span>
+                            <a id="card-link-pantau" href="#" target="_blank" rel="noopener noreferrer" onclick="handlePantauLinkClick(event)" class="w-10 h-10 bg-card-cyan-icon rounded-full flex items-center justify-center text-white shadow group-hover:scale-110 transition-transform">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-gray-800">Tingkat Kehadiran Peserta Ujian</h3>
-                                <p class="text-xs text-gray-500">Persentase siswa hadir di sesi ujian harian</p>
-                            </div>
-                            <span class="text-xs font-semibold px-2 py-1 bg-green-50 text-green-600 rounded-md">Harian Ujian</span>
-                        </div>
-                        <div class="relative h-64 w-full">
-                            <canvas id="chart-kehadiran"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
-                            <div>
-                                <h3 class="text-base font-bold text-gray-800">Daya Beda & Tingkat Kesukaran Soal</h3>
-                                <p class="text-xs text-gray-500">Proporsi Kategori Soal: Mudah, Sedang, Sulit</p>
-                            </div>
-                            <span class="text-xs font-semibold px-2 py-1 bg-amber-50 text-amber-700 rounded-md">Analisis Butir</span>
-                        </div>
-                        <div class="relative h-64 w-full">
-                            <canvas id="chart-kesukaran"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Detailed Table Summary -->
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="p-5 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                        <div>
-                            <h3 class="text-base font-bold text-gray-800">Tabel Rekapitulasi Performa Ujian Per Kelas</h3>
-                            <p class="text-xs text-gray-500">Rincian nilai rata-rata, tingkat ketuntasan, dan siswa butuh pendampingan.</p>
-                        </div>
-                        <button onclick="exportTableToCSV('rekap_performa_ujian.csv')" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition flex items-center space-x-1.5 shadow-sm">
-                            <i class="fas fa-file-excel"></i>
-                            <span>Ekspor Data (.CSV)</span>
-                        </button>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs border-collapse" id="table-rekap-analytics">
-                            <thead>
-                                <tr class="bg-gray-50 text-gray-600 font-semibold uppercase tracking-wider border-b border-gray-200">
-                                    <th class="py-3 px-4">Kelas</th>
-                                    <th class="py-3 px-4">Jml Siswa</th>
-                                    <th class="py-3 px-4 text-center">Rata-Rata</th>
-                                    <th class="py-3 px-4 text-center">Tuntas (>=75)</th>
-                                    <th class="py-3 px-4 text-center">Remedial</th>
-                                    <th class="py-3 px-4 text-center">% Ketuntasan</th>
-                                    <th class="py-3 px-4 text-center">Nilai Max</th>
-                                    <th class="py-3 px-4 text-center">Nilai Min</th>
-                                    <th class="py-3 px-4 text-center">Aksi Dokumen</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200" id="table-analytics-body">
-                                <!-- Dynamic rows generated via JS -->
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
 
             </div>
@@ -736,11 +549,7 @@
                 </a>
             </div>
 
-            <div class="mt-4 pt-3 border-t flex justify-between items-center">
-                <button onclick="switchTab('statistik'); closeRekapModal();" class="text-xs text-blue-600 font-semibold hover:underline flex items-center space-x-1">
-                    <i class="fas fa-chart-pie"></i>
-                    <span>Lihat Statistik Visual</span>
-                </button>
+            <div class="mt-4 pt-3 border-t flex justify-end items-center">
                 <button onclick="closeRekapModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium transition">
                     Tutup
                 </button>
@@ -869,6 +678,12 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Pantau Ujian -->
+                    <div class="pt-2 border-t border-gray-200">
+                        <label class="block text-gray-600 font-medium mb-1">Pantau Ujian (Monitoring / Web App / Sheet)</label>
+                        <input type="url" id="input-link-pantau" placeholder="https://..." class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+                    </div>
                 </div>
 
                 <!-- Footer Buttons -->
@@ -970,7 +785,8 @@
                 berita: "https://docs.google.com/forms/d/e/1FAIpQLSejgf9-a0vRN6CX32hhawC7kMJii5RHWIulXjyijyKDCFq3rA/viewform",
                 k7: "https://shorturl.at/ZeNl9",
                 k8: "https://shorturl.at/LmDTo",
-                k9: "https://shorturl.at/60fCh"
+                k9: "https://shorturl.at/60fCh",
+                pantau: ""
             }
         };
 
@@ -1071,7 +887,8 @@ function doPost(e) {
       ["berita", links.berita || ""],
       ["k7", links.k7 || ""],
       ["k8", links.k8 || ""],
-      ["k9", links.k9 || ""]
+      ["k9", links.k9 || ""],
+      ["pantau", links.pantau || ""]
     ];
     sheet.getRange(3, 1, readableRows.length, 2).setValues(readableRows);
 
@@ -1087,76 +904,6 @@ function doPost(e) {
 
         let currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         let isEditMode = false;
-
-        // Chart instance references
-        let chartMapelInstance = null;
-        let chartPredikatInstance = null;
-        let chartKehadiranInstance = null;
-        let chartKesukaranInstance = null;
-
-        // Dataset Mock for Analytics
-        const ANALYTICS_DATA = {
-            semua: {
-                totalSiswa: 288,
-                rataRata: 81.4,
-                ketuntasan: "87.5%",
-                remedial: 36,
-                maxScore: 98,
-                minScore: 48,
-                mapel: {
-                    labels: ['Matematika', 'B. Indonesia', 'B. Inggris', 'IPA', 'IPS', 'PAI', 'Kemuhammadiyahan', 'Seni Budaya'],
-                    scores: [78.2, 85.6, 82.1, 77.4, 83.9, 88.5, 89.2, 84.0]
-                },
-                predikat: [112, 140, 28, 8],
-                kehadiran: [99.2, 98.6, 99.5, 98.1, 99.0],
-                kesukaran: [30, 55, 15]
-            },
-            '7': {
-                totalSiswa: 96,
-                rataRata: 82.1,
-                ketuntasan: "89.5%",
-                remedial: 10,
-                maxScore: 98,
-                minScore: 52,
-                mapel: {
-                    labels: ['Matematika', 'B. Indonesia', 'B. Inggris', 'IPA', 'IPS', 'PAI', 'Kemuhammadiyahan', 'Seni Budaya'],
-                    scores: [79.5, 86.2, 83.0, 78.5, 84.2, 89.0, 90.1, 85.2]
-                },
-                predikat: [40, 46, 8, 2],
-                kehadiran: [99.5, 99.0, 100, 98.8, 99.2],
-                kesukaran: [35, 50, 15]
-            },
-            '8': {
-                totalSiswa: 96,
-                rataRata: 80.2,
-                ketuntasan: "84.3%",
-                remedial: 15,
-                maxScore: 96,
-                minScore: 48,
-                mapel: {
-                    labels: ['Matematika', 'B. Indonesia', 'B. Inggris', 'IPA', 'IPS', 'PAI', 'Kemuhammadiyahan', 'Seni Budaya'],
-                    scores: [76.0, 84.5, 80.5, 75.8, 82.5, 87.2, 88.0, 83.1]
-                },
-                predikat: [34, 47, 11, 4],
-                kehadiran: [98.8, 98.0, 99.1, 97.5, 98.9],
-                kesukaran: [25, 58, 17]
-            },
-            '9': {
-                totalSiswa: 96,
-                rataRata: 82.0,
-                ketuntasan: "88.5%",
-                remedial: 11,
-                maxScore: 97,
-                minScore: 50,
-                mapel: {
-                    labels: ['Matematika', 'B. Indonesia', 'B. Inggris', 'IPA', 'IPS', 'PAI', 'Kemuhammadiyahan', 'Seni Budaya'],
-                    scores: [79.1, 86.1, 82.8, 77.9, 85.0, 89.3, 89.5, 83.7]
-                },
-                predikat: [38, 47, 9, 2],
-                kehadiran: [99.3, 98.8, 99.4, 98.0, 99.0],
-                kesukaran: [30, 57, 13]
-            }
-        };
 
         // Mendapatkan URL Cloud aktif (prioritas dari konstanta CLOUD_API_URL, lalu fallback localStorage)
         function getActiveCloudUrl() {
@@ -1328,6 +1075,7 @@ function doPost(e) {
             document.getElementById('link-nav-pengawas').href = l.pengawas;
             document.getElementById('link-nav-peserta').href = l.peserta;
             document.getElementById('link-nav-berita').href = l.berita;
+            if (document.getElementById('link-nav-pantau')) document.getElementById('link-nav-pantau').href = l.pantau || '#';
 
             // Card links
             document.getElementById('card-link-jadwal').href = l.jadwal;
@@ -1336,6 +1084,7 @@ function doPost(e) {
             document.getElementById('card-link-pengawas').href = l.pengawas;
             document.getElementById('card-link-peserta').href = l.peserta;
             document.getElementById('card-link-berita').href = l.berita;
+            if (document.getElementById('card-link-pantau')) document.getElementById('card-link-pantau').href = l.pantau || '#';
 
             // Kelas 7, 8, 9 links
             document.getElementById('card-link-k7').href = l.k7;
@@ -1347,34 +1096,18 @@ function doPost(e) {
             document.getElementById('modal-link-k9').href = l.k9;
         }
 
-        // Tab Switching Handler (Main Views)
-        function switchTab(tabName) {
-            const viewBeranda = document.getElementById('view-beranda');
-            const viewStatistik = document.getElementById('view-statistik');
-            
-            const navBeranda = document.getElementById('nav-beranda');
-            const navStatistik = document.getElementById('nav-statistik');
-
-            if (tabName === 'beranda') {
-                viewBeranda.classList.remove('hidden');
-                viewStatistik.classList.add('hidden');
-                
-                navBeranda.classList.add('sidebar-item-active');
-                navStatistik.classList.remove('sidebar-item-active');
-                navStatistik.classList.add('hover:bg-sidebar-light', 'text-gray-300');
-            } else if (tabName === 'statistik') {
-                viewBeranda.classList.add('hidden');
-                viewStatistik.classList.remove('hidden');
-                
-                navStatistik.classList.add('sidebar-item-active');
-                navBeranda.classList.remove('sidebar-item-active');
-                navBeranda.classList.add('hover:bg-sidebar-light', 'text-gray-300');
-
-                setTimeout(() => {
-                    initOrUpdateCharts();
-                }, 100);
+        // Penanganan klik tautan Pantau Ujian jika URL belum diatur
+        function handlePantauLinkClick(event) {
+            const pantauUrl = (currentConfig.links.pantau || "").trim();
+            if (!pantauUrl || pantauUrl === '#') {
+                event.preventDefault();
+                showToast("Tautan Pantau Ujian belum diatur. Silakan isi URL di menu Pengaturan.", "info");
+                quickEditLink('pantau');
             }
+        }
 
+        // Tutup sidebar mobile jika terbuka saat klik Beranda
+        function closeMobileSidebarIfOpen() {
             const sidebar = document.getElementById('sidebar');
             if (!sidebar.classList.contains('-translate-x-full')) {
                 toggleMobileSidebar();
@@ -1490,171 +1223,11 @@ function doPost(e) {
                 const targetInput = document.getElementById(`input-link-${key}`);
                 if (targetInput) {
                     targetInput.focus();
+                    targetInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     targetInput.classList.add('ring-2', 'ring-yellow-400');
                     setTimeout(() => targetInput.classList.remove('ring-2', 'ring-yellow-400'), 1500);
                 }
             }, 150);
-        }
-
-        // Initialize & Update Chart.js Graphics
-        function initOrUpdateCharts() {
-            const selectedKelas = document.getElementById('filter-kelas').value || 'semua';
-            const data = ANALYTICS_DATA[selectedKelas] || ANALYTICS_DATA['semua'];
-
-            document.getElementById('kpi-total-siswa').textContent = data.totalSiswa;
-            document.getElementById('kpi-rata-rata').textContent = data.rataRata;
-            document.getElementById('kpi-ketuntasan').textContent = data.ketuntasan;
-            document.getElementById('kpi-remedial').textContent = data.remedial;
-            document.getElementById('kpi-max').textContent = `Max: ${data.maxScore}`;
-            document.getElementById('kpi-min').textContent = `Min: ${data.minScore}`;
-
-            const ctxMapel = document.getElementById('chart-mapel').getContext('2d');
-            if (chartMapelInstance) chartMapelInstance.destroy();
-            chartMapelInstance = new Chart(ctxMapel, {
-                type: 'bar',
-                data: {
-                    labels: data.mapel.labels,
-                    datasets: [
-                        {
-                            label: 'Rata-Rata Nilai',
-                            data: data.mapel.scores,
-                            backgroundColor: '#3B82F6',
-                            borderRadius: 6,
-                        },
-                        {
-                            label: 'Batas KKM (75)',
-                            data: Array(data.mapel.labels.length).fill(75),
-                            type: 'line',
-                            borderColor: '#EF4444',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            pointRadius: 0,
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { min: 50, max: 100, grid: { color: '#f3f4f6' } },
-                        x: { grid: { display: false } }
-                    },
-                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } }
-                }
-            });
-
-            const ctxPredikat = document.getElementById('chart-predikat').getContext('2d');
-            if (chartPredikatInstance) chartPredikatInstance.destroy();
-            chartPredikatInstance = new Chart(ctxPredikat, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Sangat Baik (A: 90-100)', 'Baik (B: 80-89)', 'Cukup (C: 75-79)', 'Remedial (D: <75)'],
-                    datasets: [{
-                        data: data.predikat,
-                        backgroundColor: ['#10B981', '#3B82F6', '#F59E0B', '#EF4444'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
-                    },
-                    cutout: '65%'
-                }
-            });
-
-            const ctxKehadiran = document.getElementById('chart-kehadiran').getContext('2d');
-            if (chartKehadiranInstance) chartKehadiranInstance.destroy();
-            chartKehadiranInstance = new Chart(ctxKehadiran, {
-                type: 'line',
-                data: {
-                    labels: ['Hari 1', 'Hari 2', 'Hari 3', 'Hari 4', 'Hari 5'],
-                    datasets: [{
-                        label: '% Kehadiran Peserta',
-                        data: data.kehadiran,
-                        borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 4,
-                        pointBackgroundColor: '#10B981'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { min: 90, max: 100, grid: { color: '#f3f4f6' } },
-                        x: { grid: { display: false } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            const ctxKesukaran = document.getElementById('chart-kesukaran').getContext('2d');
-            if (chartKesukaranInstance) chartKesukaranInstance.destroy();
-            chartKesukaranInstance = new Chart(ctxKesukaran, {
-                type: 'bar',
-                data: {
-                    labels: ['Mudah', 'Sedang', 'Sulit'],
-                    datasets: [{
-                        label: 'Persentase Kategori Soal (%)',
-                        data: data.kesukaran,
-                        backgroundColor: ['#3B82F6', '#F59E0B', '#EF4444'],
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { max: 100, grid: { color: '#f3f4f6' } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            renderAnalyticsTable(selectedKelas);
-        }
-
-        function renderAnalyticsTable(selectedKelas) {
-            const tbody = document.getElementById('table-analytics-body');
-            tbody.innerHTML = '';
-
-            const kelasList = selectedKelas === 'semua' ? ['7', '8', '9'] : [selectedKelas];
-            kelasList.forEach(k => {
-                const dataK = ANALYTICS_DATA[k];
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-gray-50 transition border-b border-gray-100';
-
-                tr.innerHTML = `
-                    <td class="py-3 px-4 font-bold text-gray-800">Kelas ${k}</td>
-                    <td class="py-3 px-4">${dataK.totalSiswa} Siswa</td>
-                    <td class="py-3 px-4 text-center font-bold text-blue-600">${dataK.rataRata}</td>
-                    <td class="py-3 px-4 text-center text-emerald-600 font-semibold">${dataK.totalSiswa - dataK.remedial}</td>
-                    <td class="py-3 px-4 text-center text-rose-600 font-semibold">${dataK.remedial}</td>
-                    <td class="py-3 px-4 text-center font-bold text-gray-700">${dataK.ketuntasan}</td>
-                    <td class="py-3 px-4 text-center text-emerald-600 font-medium">${dataK.maxScore}</td>
-                    <td class="py-3 px-4 text-center text-rose-600 font-medium">${dataK.minScore}</td>
-                    <td class="py-3 px-4 text-center">
-                        <a href="${currentConfig.links['k' + k]}" target="_blank" class="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded text-[11px] font-semibold inline-flex items-center space-x-1">
-                            <i class="fas fa-external-link-alt text-[10px]"></i>
-                            <span>Buka Sheet</span>
-                        </a>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function updateDashboardAnalytics(showToastNotice = false) {
-            initOrUpdateCharts();
-            if (showToastNotice) {
-                showToast("Data grafik & analisis berhasil diperbarui!", "success");
-            }
         }
 
         // Modal Handlers: Rekap Hasil Ujian
@@ -1694,6 +1267,7 @@ function doPost(e) {
             document.getElementById('input-link-k7').value = l.k7;
             document.getElementById('input-link-k8').value = l.k8;
             document.getElementById('input-link-k9').value = l.k9;
+            if (document.getElementById('input-link-pantau')) document.getElementById('input-link-pantau').value = l.pantau || '';
 
             // Isi URL Cloud aktif
             document.getElementById('input-cloud-url').value = getActiveCloudUrl();
@@ -1736,6 +1310,7 @@ function doPost(e) {
                     k7: document.getElementById('input-link-k7').value.trim(),
                     k8: document.getElementById('input-link-k8').value.trim(),
                     k9: document.getElementById('input-link-k9').value.trim(),
+                    pantau: document.getElementById('input-link-pantau') ? document.getElementById('input-link-pantau').value.trim() : (currentConfig.links.pantau || '')
                 }
             };
 
@@ -1821,31 +1396,6 @@ function doPost(e) {
             } catch (e) {
                 console.error(e);
             }
-        }
-
-        // Export analytics table to CSV
-        function exportTableToCSV(filename) {
-            let csv = [];
-            const rows = document.querySelectorAll("#table-rekap-analytics tr");
-            
-            for (let i = 0; i < rows.length; i++) {
-                let row = [], cols = rows[i].querySelectorAll("td, th");
-                for (let j = 0; j < cols.length - 1; j++) {
-                    row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
-                }
-                csv.push(row.join(","));
-            }
-
-            const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
-            const downloadLink = document.createElement("a");
-            downloadLink.download = filename;
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            
-            showToast("Laporan CSV berhasil diunduh!", "success");
         }
 
         // Toast Notification Helper
