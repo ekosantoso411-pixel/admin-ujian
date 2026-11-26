@@ -117,7 +117,7 @@
 <body class="bg-gray-50 text-gray-800 font-sans h-screen flex flex-col overflow-hidden">
 
     <!-- Toast Notification container -->
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-[60] flex flex-col space-y-2 pointer-events-none"></div>
 
     <!-- Top Header -->
     <header class="header-gradient text-white shadow-md relative z-20 flex-shrink-0">
@@ -146,8 +146,15 @@
                 </div>
             </div>
 
-            <!-- Right: Admin Profile & Controls -->
+            <!-- Right: Cloud Sync Badge, Admin Profile & Controls -->
             <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Cloud Sync Status Button -->
+                <button onclick="syncFromCloud(true)" id="btn-cloud-status" title="Klik untuk sinkronisasi ulang dari Google Sheets" class="flex items-center space-x-1.5 bg-white/10 hover:bg-white/20 text-white border border-white/25 text-xs px-2.5 py-1.5 rounded-full transition">
+                    <span id="cloud-status-dot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span id="cloud-status-text" class="font-medium hidden lg:inline">Mode Lokal</span>
+                    <i id="cloud-sync-icon" class="fas fa-sync-alt text-[10px] opacity-80"></i>
+                </button>
+
                 <!-- Mode Edit Toggle Button -->
                 <button onclick="toggleEditMode()" id="btn-edit-mode" class="flex items-center space-x-1.5 bg-yellow-400/20 hover:bg-yellow-400/30 text-yellow-100 border border-yellow-300/40 text-xs sm:text-sm px-3 py-1.5 rounded-full transition shadow-sm">
                     <i class="fas fa-edit text-xs"></i>
@@ -155,11 +162,11 @@
                 </button>
 
                 <!-- Settings / Config Button -->
-                <button onclick="openSettingsModal()" title="Pengaturan Portal & Link" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full border border-white/20 transition">
+                <button onclick="openSettingsModal('links')" title="Pengaturan Portal, Link & Cloud" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full border border-white/20 transition">
                     <i class="fas fa-cog"></i>
                 </button>
 
-                <!-- User Profile Dropdown / Badge -->
+                <!-- User Profile Badge -->
                 <div class="flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-full border border-white/20">
                     <div class="w-7 h-7 bg-white text-primary rounded-full flex items-center justify-center font-bold text-xs">
                         <i class="fas fa-user-shield text-xs"></i>
@@ -182,7 +189,7 @@
                     <span class="font-medium">Beranda</span>
                 </button>
                 
-                <!-- Tab 2: Dashboard Statistik & Grafik (NEW) -->
+                <!-- Tab 2: Dashboard Statistik & Grafik -->
                 <button onclick="switchTab('statistik')" id="nav-statistik" class="w-full flex items-center justify-between px-4 py-3 hover:bg-sidebar-light rounded-lg transition duration-200 text-gray-300 hover:text-white text-left">
                     <div class="flex items-center space-x-3">
                         <i class="fas fa-chart-pie w-5 text-center text-lg text-emerald-400"></i>
@@ -257,8 +264,11 @@
                 <!-- Header Banner / Welcome Area -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl border border-gray-200 shadow-sm gap-4">
                     <div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-md">Portal Utama</span>
+                            <span id="badge-cloud-sync" class="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-md border border-amber-200 cursor-pointer" onclick="openSettingsModal('cloud')">
+                                <i class="fas fa-cloud mr-1"></i> <span id="badge-cloud-text">Belum Terhubung Cloud</span>
+                            </span>
                             <span id="badge-edit-mode" class="hidden px-2.5 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-md border border-yellow-300">Mode Edit Aktif</span>
                         </div>
                         <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mt-2">Selamat Datang</h1>
@@ -273,7 +283,7 @@
                         </div>
                         <div>
                             <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Tanggal Hari Ini</p>
-                            <p class="text-gray-800 font-bold text-sm" id="current-date">Selasa, 23 September 2026</p>
+                            <p class="text-gray-800 font-bold text-sm" id="current-date">Memuat tanggal...</p>
                         </div>
                     </div>
                 </div>
@@ -350,7 +360,7 @@
                         </div>
                     </div>
 
-                    <!-- Card 3: Daftar Hadir Pengawas -->
+                    <!-- Card 4: Daftar Hadir Pengawas -->
                     <div class="bg-card-orange-bg border border-card-orange-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
                         <i class="fas fa-clipboard-user card-pattern text-card-orange-icon"></i>
                         <div>
@@ -373,7 +383,7 @@
                         </div>
                     </div>
 
-                    <!-- Card 4: Daftar Hadir Peserta -->
+                    <!-- Card 5: Daftar Hadir Peserta -->
                     <div class="bg-card-purple-bg border border-card-purple-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
                         <i class="fas fa-users card-pattern text-card-purple-icon"></i>
                         <div>
@@ -396,7 +406,7 @@
                         </div>
                     </div>
 
-                    <!-- Card 5: Berita Acara -->
+                    <!-- Card 6: Berita Acara -->
                     <div class="bg-card-teal-bg border border-card-teal-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
                         <i class="far fa-file-alt card-pattern text-card-teal-icon"></i>
                         <div>
@@ -419,7 +429,7 @@
                         </div>
                     </div>
 
-                    <!-- Card 6: Rekap Hasil Ujian -->
+                    <!-- Card 7: Rekap Hasil Ujian -->
                     <div class="bg-card-red-bg border border-card-red-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between">
                         <i class="fas fa-chart-line card-pattern text-card-red-icon"></i>
                         <div>
@@ -427,7 +437,7 @@
                                 <div class="w-13 h-13 p-3 bg-card-red-icon rounded-2xl flex items-center justify-center text-white text-2xl shadow-sm">
                                     <i class="fas fa-chart-bar"></i>
                                 </div>
-                                <button onclick="openSettingsModal()" class="btn-edit-overlay hidden bg-white/80 hover:bg-white text-red-600 p-2 rounded-lg text-xs font-semibold shadow border border-red-200 transition">
+                                <button onclick="openSettingsModal('links')" class="btn-edit-overlay hidden bg-white/80 hover:bg-white text-red-600 p-2 rounded-lg text-xs font-semibold shadow border border-red-200 transition">
                                     <i class="fas fa-pen mr-1"></i> Edit Link
                                 </button>
                             </div>
@@ -510,7 +520,7 @@
                             </select>
                         </div>
 
-                        <!-- Refresh & Export -->
+                        <!-- Refresh -->
                         <div class="flex items-end h-full pt-4">
                             <button onclick="updateDashboardAnalytics(true)" class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition flex items-center space-x-1 shadow-sm">
                                 <i class="fas fa-sync-alt"></i>
@@ -522,7 +532,6 @@
 
                 <!-- KPI Metric Cards Row -->
                 <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-                    <!-- Total Peserta -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
                         <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
                             <i class="fas fa-user-graduate"></i>
@@ -533,7 +542,6 @@
                         </div>
                     </div>
 
-                    <!-- Rata-rata Nilai -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
                         <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
                             <i class="fas fa-calculator"></i>
@@ -544,7 +552,6 @@
                         </div>
                     </div>
 
-                    <!-- Tingkat Ketuntasan % -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
                         <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
                             <i class="fas fa-check-circle"></i>
@@ -555,7 +562,6 @@
                         </div>
                     </div>
 
-                    <!-- Siswa Remedial -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3">
                         <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
                             <i class="fas fa-exclamation-triangle"></i>
@@ -566,7 +572,6 @@
                         </div>
                     </div>
 
-                    <!-- Nilai Max & Min -->
                     <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center space-x-3 col-span-2 md:col-span-1">
                         <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-lg flex-shrink-0">
                             <i class="fas fa-trophy"></i>
@@ -580,8 +585,6 @@
 
                 <!-- Charts Grid Area -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    
-                    <!-- Chart 1: Rata-Rata Nilai per Mata Pelajaran (Bar Chart) -->
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
                         <div class="flex justify-between items-center mb-4">
                             <div>
@@ -595,7 +598,6 @@
                         </div>
                     </div>
 
-                    <!-- Chart 2: Sebaran Predikat & Status Ketuntasan (Doughnut Chart) -->
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
                         <div class="flex justify-between items-center mb-4">
                             <div>
@@ -609,7 +611,6 @@
                         </div>
                     </div>
 
-                    <!-- Chart 3: Trend Kehadiran & Partisipasi Ujian (Line Chart) -->
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
                         <div class="flex justify-between items-center mb-4">
                             <div>
@@ -623,7 +624,6 @@
                         </div>
                     </div>
 
-                    <!-- Chart 4: Analisis Tingkat Kesukaran Soal per Mapel (Radar/Bar) -->
                     <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
                         <div class="flex justify-between items-center mb-4">
                             <div>
@@ -636,10 +636,9 @@
                             <canvas id="chart-kesukaran"></canvas>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Detailed Table Summary per Class & Subject -->
+                <!-- Detailed Table Summary -->
                 <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                     <div class="p-5 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div>
@@ -749,29 +748,55 @@
         </div>
     </div>
 
-    <!-- MODAL 2: Settings & Link Edit Modal -->
+    <!-- MODAL 2: Settings, Link Edit & Cloud Sync Modal -->
     <div id="settings-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 overflow-y-auto py-6">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full mx-4 my-auto transform scale-95 transition-transform duration-300 max-h-[90vh] flex flex-col" id="settings-modal-content">
-            <div class="flex justify-between items-center mb-4 border-b pb-3">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full mx-4 my-auto transform scale-95 transition-transform duration-300 max-h-[92vh] flex flex-col" id="settings-modal-content">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-3 border-b pb-3">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center">
                         <i class="fas fa-cog text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-gray-800">Pengaturan Tautan & Identitas Portal</h3>
-                        <p class="text-xs text-gray-500">Ubah URL Google Sheet, Forms, dan nama sekolah</p>
+                        <h3 class="text-lg font-bold text-gray-800">Pengaturan Portal & Sinkronisasi Cloud</h3>
+                        <p class="text-xs text-gray-500">Edit tautan sekali, otomatis berubah di semua HP & laptop</p>
                     </div>
                 </div>
                 <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition">
                     <i class="fas fa-times text-base"></i>
                 </button>
             </div>
+
+            <!-- Modal Tabs -->
+            <div class="flex space-x-2 mb-4 bg-gray-100 p-1 rounded-xl text-xs font-semibold">
+                <button type="button" onclick="switchSettingsTab('links')" id="tab-btn-links" class="flex-1 py-2 px-3 rounded-lg bg-white text-blue-700 shadow-sm transition">
+                    <i class="fas fa-link mr-1.5"></i> Identitas & Tautan
+                </button>
+                <button type="button" onclick="switchSettingsTab('cloud')" id="tab-btn-cloud" class="flex-1 py-2 px-3 rounded-lg text-gray-600 hover:text-gray-800 transition">
+                    <i class="fas fa-cloud mr-1.5"></i> Cloud Google Sheets
+                </button>
+            </div>
             
+            <!-- TAB 1: FORM IDENTITAS & TAUTAN -->
             <form id="form-settings" onsubmit="savePortalSettings(event)" class="space-y-4 overflow-y-auto pr-1 flex-1 text-xs">
                 
+                <!-- Cloud Save Notice -->
+                <div id="settings-cloud-notice" class="p-3 rounded-xl border text-xs flex items-start space-x-2.5">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Admin PIN Verification (Required when Cloud is active) -->
+                <div id="admin-pin-box" class="bg-amber-50 p-3.5 rounded-xl border border-amber-200 space-y-2 hidden">
+                    <label class="block font-bold text-amber-900 flex items-center">
+                        <i class="fas fa-lock mr-1.5"></i> PIN Admin (Keamanan Simpan ke Google Sheets)
+                    </label>
+                    <input type="password" id="input-admin-pin" placeholder="Masukkan PIN Admin (bawaan: 123456)" class="w-full px-3 py-2 bg-white border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    <p class="text-[11px] text-amber-700">PIN ini mencegah orang lain mengubah link sekolah Anda. PIN dapat diganti pada kode Google Apps Script.</p>
+                </div>
+
                 <!-- School Info Section -->
                 <div class="bg-blue-50/50 p-3.5 rounded-xl border border-blue-100 space-y-3">
-                    <h4 class="font-bold text-gray-800 flex items-center text-xs text-blue-800">
+                    <h4 class="font-bold text-blue-800 flex items-center text-xs">
                         <i class="fas fa-school mr-1.5"></i> Identitas Sekolah
                     </h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -844,11 +869,10 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Footer Buttons -->
-                <div class="pt-3 border-t flex justify-between items-center">
+                <div class="pt-3 border-t flex justify-between items-center sticky bottom-0 bg-white pb-1">
                     <button type="button" onclick="resetDefaultSettings()" class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold transition">
                         <i class="fas fa-undo mr-1"></i> Reset Bawaan
                     </button>
@@ -856,18 +880,83 @@
                         <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium transition">
                             Batal
                         </button>
-                        <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition shadow-sm">
-                            <i class="fas fa-save mr-1"></i> Simpan Perubahan
+                        <button type="submit" id="btn-save-settings" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold transition shadow-sm flex items-center space-x-1.5">
+                            <i class="fas fa-save"></i>
+                            <span id="btn-save-label">Simpan Perubahan</span>
                         </button>
                     </div>
                 </div>
-
             </form>
+
+            <!-- TAB 2: PENGATURAN CLOUD GOOGLE SHEETS & APPS SCRIPT -->
+            <div id="tab-panel-cloud" class="hidden space-y-4 overflow-y-auto pr-1 flex-1 text-xs">
+                <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-2">
+                    <h4 class="font-bold text-emerald-900 flex items-center text-sm">
+                        <i class="fas fa-globe mr-2"></i> Sinkronisasi Semua Perangkat (Cara 2)
+                    </h4>
+                    <p class="text-emerald-800 leading-relaxed">
+                        Dengan menghubungkan URL Web App Google Apps Script di bawah ini, setiap perubahan link dari antarmuka web akan disimpan ke <b>Google Sheets</b> dan langsung tampil di semua HP/laptop.
+                    </p>
+                </div>
+
+                <!-- Input URL Web App -->
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-3">
+                    <label class="block font-bold text-gray-700">URL Web App Google Apps Script</label>
+                    <input type="url" id="input-cloud-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono text-[11px]">
+                    <div class="flex flex-wrap gap-2">
+                        <button type="button" onclick="saveAndTestCloudUrl()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold transition flex items-center space-x-1.5">
+                            <i class="fas fa-plug"></i>
+                            <span>Simpan & Tes Koneksi</span>
+                        </button>
+                        <button type="button" onclick="syncFromCloud(true)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition flex items-center space-x-1.5">
+                            <i class="fas fa-cloud-download-alt"></i>
+                            <span>Tarik Data dari Cloud</span>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
+                        <i class="fas fa-info-circle mr-1"></i> <b>Penting untuk GitHub Pages:</b> Setelah tes koneksi berhasil, tempelkan URL Web App yang sama ke variabel <code>CLOUD_API_URL</code> di dalam file <code>index.html</code> (cukup <b>1 kali saja</b>) agar semua HP/laptop baru otomatis terhubung.
+                    </p>
+                </div>
+
+                <!-- Step-by-step & Copyable Apps Script -->
+                <div class="bg-slate-900 text-slate-100 p-4 rounded-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-white flex items-center">
+                            <i class="fas fa-code mr-2 text-emerald-400"></i> Kode Google Apps Script (Code.gs)
+                        </h4>
+                        <button type="button" onclick="copyAppsScriptCode()" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[11px] font-semibold transition flex items-center space-x-1">
+                            <i class="fas fa-copy"></i>
+                            <span>Salin Kode</span>
+                        </button>
+                    </div>
+                    <ol class="list-decimal list-inside space-y-1 text-[11px] text-slate-300">
+                        <li>Buat <b>Google Spreadsheet</b> baru di Google Drive.</li>
+                        <li>Klik menu <b>Ekstensi (Extensions) &rarr; Apps Script</b>.</li>
+                        <li>Hapus isi lama, tempel kode di bawah ini, lalu ubah <code>ADMIN_PIN</code> jika perlu.</li>
+                        <li>Klik <b>Terapkan (Deploy) &rarr; Deployment baru &rarr; Aplikasi Web</b>.</li>
+                        <li>Atur <i>Jalankan sebagai: Saya</i> dan <i>Yang memiliki akses: Siapa saja (Anyone)</i>, lalu klik <b>Terapkan</b> dan salin URL Web App-nya.</li>
+                    </ol>
+                    <pre id="apps-script-code" class="bg-slate-950 text-emerald-300 p-3 rounded-lg overflow-x-auto text-[10px] leading-relaxed max-h-56 select-all border border-slate-700"></pre>
+                </div>
+
+                <div class="pt-2 border-t flex justify-end">
+                    <button type="button" onclick="closeSettingsModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium transition">
+                        Tutup
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Default Configuration Links & Branding
+        // =========================================================================
+        // KONFIGURASI CLOUD GOOGLE SHEETS (TEMPEL URL WEB APP APPS SCRIPT DI SINI)
+        // Cukup diisi 1 kali di file index.html GitHub Pages agar semua HP/laptop
+        // otomatis mengambil data terbaru dari Google Sheets saat halaman dibuka.
+        // =========================================================================
+        const CLOUD_API_URL = "https://script.google.com/macros/s/AKfycbzUeHwqqtnhRfzhfWH61B_VnJr8TRK5MnDdebX7TDCrd2_UifaUVR61X7uAzMOR4pTj/exec";
+
+        // Default Configuration Links & Branding (Fallback jika belum ada data Cloud)
         const DEFAULT_CONFIG = {
             schoolName: "SMP MUHAMMADIYAH 2 DEPOK",
             slogan: "Berakhlaq • Berkemajuan • Berprestasi",
@@ -885,7 +974,118 @@
             }
         };
 
-        let currentConfig = { ...DEFAULT_CONFIG };
+        // Template Kode Google Apps Script (untuk disalin user dari menu Pengaturan)
+        const APPS_SCRIPT_TEMPLATE = `// =========================================================
+// GOOGLE APPS SCRIPT - BACKEND PORTAL ADMINISTRASI UJIAN
+// =========================================================
+const SHEET_NAME = "ConfigPortal";
+const ADMIN_PIN = "123456"; // Ubah PIN ini sesuai keinginan Anda
+
+function getOrCreateSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    sheet.getRange("A1:B1").setValues([["Key", "Value"]]);
+    sheet.getRange("A1:B1").setFontWeight("bold");
+  }
+  return sheet;
+}
+
+// Mengambil data konfigurasi terbaru untuk semua HP & laptop
+function doGet(e) {
+  try {
+    const sheet = getOrCreateSheet();
+    const data = sheet.getDataRange().getValues();
+    let configJson = null;
+
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][0] === "portal_config" && data[i][1]) {
+        configJson = JSON.parse(data[i][1]);
+        break;
+      }
+    }
+
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        status: "success",
+        hasData: !!configJson,
+        config: configJson,
+        updatedAt: new Date().toISOString()
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "error", message: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Menyimpan perubahan konfigurasi dari antarmuka web
+function doPost(e) {
+  try {
+    const payload = JSON.parse(e.postData.contents);
+
+    if (ADMIN_PIN && String(payload.pin || "") !== String(ADMIN_PIN)) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ status: "error", message: "PIN Admin salah! Perubahan ditolak." })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (!payload.config) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ status: "error", message: "Data konfigurasi kosong." })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    const sheet = getOrCreateSheet();
+    const data = sheet.getDataRange().getValues();
+    const serialized = JSON.stringify(payload.config);
+    let foundRow = -1;
+
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][0] === "portal_config") {
+        foundRow = i + 1;
+        break;
+      }
+    }
+
+    if (foundRow > 0) {
+      sheet.getRange(foundRow, 2).setValue(serialized);
+    } else {
+      sheet.appendRow(["portal_config", serialized]);
+    }
+
+    // Ringkasan yang mudah dibaca di baris 3 ke bawah
+    const links = payload.config.links || {};
+    const readableRows = [
+      ["last_updated", new Date().toLocaleString("id-ID")],
+      ["schoolName", payload.config.schoolName || ""],
+      ["slogan", payload.config.slogan || ""],
+      ["logoUrl", payload.config.logoUrl || ""],
+      ["jadwal", links.jadwal || ""],
+      ["kartu", links.kartu || ""],
+      ["token", links.token || ""],
+      ["pengawas", links.pengawas || ""],
+      ["peserta", links.peserta || ""],
+      ["berita", links.berita || ""],
+      ["k7", links.k7 || ""],
+      ["k8", links.k8 || ""],
+      ["k9", links.k9 || ""]
+    ];
+    sheet.getRange(3, 1, readableRows.length, 2).setValues(readableRows);
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "success", message: "Tersimpan ke Google Sheets!" })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "error", message: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}`;
+
+        let currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
         let isEditMode = false;
 
         // Chart instance references
@@ -907,9 +1107,9 @@
                     labels: ['Matematika', 'B. Indonesia', 'B. Inggris', 'IPA', 'IPS', 'PAI', 'Kemuhammadiyahan', 'Seni Budaya'],
                     scores: [78.2, 85.6, 82.1, 77.4, 83.9, 88.5, 89.2, 84.0]
                 },
-                predikat: [112, 140, 28, 8], // A, B, C, D
+                predikat: [112, 140, 28, 8],
                 kehadiran: [99.2, 98.6, 99.5, 98.1, 99.0],
-                kesukaran: [30, 55, 15] // Mudah %, Sedang %, Sulit %
+                kesukaran: [30, 55, 15]
             },
             '7': {
                 totalSiswa: 96,
@@ -958,37 +1158,167 @@
             }
         };
 
+        // Mendapatkan URL Cloud aktif (prioritas dari konstanta CLOUD_API_URL, lalu fallback localStorage)
+        function getActiveCloudUrl() {
+            const hardcoded = (CLOUD_API_URL || "").trim();
+            if (hardcoded) return hardcoded;
+            try {
+                return (localStorage.getItem('portal_ujian_cloud_url') || "").trim();
+            } catch (e) {
+                return "";
+            }
+        }
+
+        // Memperbarui indikator status Cloud di Header & Banner
+        function setCloudStatusUI(state, text) {
+            const dot = document.getElementById('cloud-status-dot');
+            const statusText = document.getElementById('cloud-status-text');
+            const syncIcon = document.getElementById('cloud-sync-icon');
+            const badge = document.getElementById('badge-cloud-sync');
+            const badgeText = document.getElementById('badge-cloud-text');
+
+            if (state === 'syncing') {
+                dot.className = 'w-2 h-2 rounded-full bg-blue-300 animate-pulse';
+                statusText.textContent = text || 'Menyinkronkan...';
+                syncIcon.classList.add('fa-spin');
+                badge.className = 'px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-md border border-blue-200 cursor-pointer';
+                badgeText.textContent = text || 'Menyinkronkan Cloud...';
+            } else if (state === 'connected') {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+                statusText.textContent = text || 'Cloud Aktif';
+                syncIcon.classList.remove('fa-spin');
+                badge.className = 'px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-md border border-emerald-200 cursor-pointer';
+                badgeText.textContent = text || 'Tersinkronisasi Google Sheets';
+            } else if (state === 'error') {
+                dot.className = 'w-2 h-2 rounded-full bg-rose-400';
+                statusText.textContent = text || 'Cloud Gagal';
+                syncIcon.classList.remove('fa-spin');
+                badge.className = 'px-2.5 py-1 bg-rose-50 text-rose-700 text-xs font-semibold rounded-md border border-rose-200 cursor-pointer';
+                badgeText.textContent = text || 'Gagal Sinkron Cloud';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+                statusText.textContent = text || 'Mode Lokal';
+                syncIcon.classList.remove('fa-spin');
+                badge.className = 'px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-md border border-amber-200 cursor-pointer';
+                badgeText.textContent = text || 'Belum Terhubung Cloud (Klik Atur)';
+            }
+        }
+
         // Initialize portal on DOM Ready
         document.addEventListener('DOMContentLoaded', () => {
+            // Tampilkan kode Apps Script di panel panduan
+            const codeEl = document.getElementById('apps-script-code');
+            if (codeEl) codeEl.textContent = APPS_SCRIPT_TEMPLATE;
+
+            // 1. Muat cache lokal lebih dulu agar tampilan langsung muncul instan
             loadConfigFromStorage();
             applyConfigToDOM();
             updateCurrentDate();
+
+            // 2. Jika Cloud URL sudah terpasang, langsung ambil data terbaru dari Google Sheets
+            if (getActiveCloudUrl()) {
+                syncFromCloud(false);
+            } else {
+                setCloudStatusUI('local');
+            }
             
             // Setup Mobile Sidebar Toggle
             document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileSidebar);
         });
 
-        // Load saved state from LocalStorage
+        // Load saved cache from LocalStorage
         function loadConfigFromStorage() {
             try {
                 const saved = localStorage.getItem('portal_ujian_config');
                 if (saved) {
-                    currentConfig = JSON.parse(saved);
+                    const parsed = JSON.parse(saved);
+                    currentConfig = mergeConfigWithDefault(parsed);
                 }
             } catch (e) {
                 console.error("Gagal memuat dari storage", e);
             }
         }
 
+        // Menggabungkan data Cloud/Lokal dengan DEFAULT_CONFIG agar tidak ada field yang kosong
+        function mergeConfigWithDefault(incoming) {
+            return {
+                schoolName: incoming?.schoolName || DEFAULT_CONFIG.schoolName,
+                slogan: incoming?.slogan || DEFAULT_CONFIG.slogan,
+                logoUrl: incoming?.logoUrl || DEFAULT_CONFIG.logoUrl,
+                links: {
+                    ...DEFAULT_CONFIG.links,
+                    ...(incoming?.links || {})
+                }
+            };
+        }
+
+        // Mengambil data konfigurasi terbaru dari Google Sheets (GET)
+        async function syncFromCloud(showNotification = false) {
+            const apiUrl = getActiveCloudUrl();
+            if (!apiUrl) {
+                setCloudStatusUI('local');
+                if (showNotification) {
+                    showToast("URL Google Apps Script belum diatur. Silakan atur di tab Cloud Google Sheets.", "info");
+                    openSettingsModal('cloud');
+                }
+                return false;
+            }
+
+            setCloudStatusUI('syncing', 'Menyinkronkan...');
+            try {
+                // Cache-buster (?t=...) memastikan HP/laptop selalu mengambil versi paling baru
+                const separator = apiUrl.includes('?') ? '&' : '?';
+                const response = await fetch(`${apiUrl}${separator}t=${Date.now()}`, {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (result.status !== 'success') {
+                    throw new Error(result.message || 'Respon server tidak valid');
+                }
+
+                if (result.hasData && result.config) {
+                    currentConfig = mergeConfigWithDefault(result.config);
+                    try {
+                        localStorage.setItem('portal_ujian_config', JSON.stringify(currentConfig));
+                    } catch (e) {
+                        console.warn("LocalStorage tidak tersedia", e);
+                    }
+                    applyConfigToDOM();
+                    setCloudStatusUI('connected', 'Cloud Aktif');
+                    if (showNotification) {
+                        showToast("Data portal berhasil disinkronkan dari Google Sheets!", "success");
+                    }
+                } else {
+                    // Sheet masih baru/kosong, gunakan default sampai admin menekan Simpan Perubahan
+                    setCloudStatusUI('connected', 'Cloud Siap');
+                    if (showNotification) {
+                        showToast("Terhubung ke Google Sheets! Data masih kosong, klik Simpan Perubahan untuk mengisi awal.", "info");
+                    }
+                }
+                return true;
+            } catch (err) {
+                console.error("Gagal sinkronisasi Cloud:", err);
+                setCloudStatusUI('error', 'Cloud Offline');
+                if (showNotification) {
+                    showToast("Gagal terhubung ke Google Sheets. Pastikan URL Web App benar & akses diatur ke 'Siapa saja (Anyone)'.", "error");
+                }
+                return false;
+            }
+        }
+
         // Apply saved settings to all DOM links & header texts
         function applyConfigToDOM() {
-            // Header texts
             document.getElementById('header-school-name').textContent = currentConfig.schoolName;
             document.getElementById('welcome-school-name').textContent = currentConfig.schoolName;
             document.getElementById('header-slogan').textContent = currentConfig.slogan;
             document.getElementById('header-logo').src = currentConfig.logoUrl;
 
-            // Links for cards and sidebar
             const l = currentConfig.links;
             
             // Sidebar links
@@ -1017,7 +1347,7 @@
             document.getElementById('modal-link-k9').href = l.k9;
         }
 
-        // Tab Switching Handler
+        // Tab Switching Handler (Main Views)
         function switchTab(tabName) {
             const viewBeranda = document.getElementById('view-beranda');
             const viewStatistik = document.getElementById('view-statistik');
@@ -1040,16 +1370,88 @@
                 navBeranda.classList.remove('sidebar-item-active');
                 navBeranda.classList.add('hover:bg-sidebar-light', 'text-gray-300');
 
-                // Render/update charts after DOM visibility is active
                 setTimeout(() => {
                     initOrUpdateCharts();
                 }, 100);
             }
 
-            // Close mobile sidebar if open
             const sidebar = document.getElementById('sidebar');
             if (!sidebar.classList.contains('-translate-x-full')) {
                 toggleMobileSidebar();
+            }
+        }
+
+        // Settings Modal Sub-tabs
+        function switchSettingsTab(tab) {
+            const formLinks = document.getElementById('form-settings');
+            const panelCloud = document.getElementById('tab-panel-cloud');
+            const btnLinks = document.getElementById('tab-btn-links');
+            const btnCloud = document.getElementById('tab-btn-cloud');
+
+            if (tab === 'cloud') {
+                formLinks.classList.add('hidden');
+                panelCloud.classList.remove('hidden');
+                btnCloud.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-emerald-700 shadow-sm transition';
+                btnLinks.className = 'flex-1 py-2 px-3 rounded-lg text-gray-600 hover:text-gray-800 transition';
+            } else {
+                panelCloud.classList.add('hidden');
+                formLinks.classList.remove('hidden');
+                btnLinks.className = 'flex-1 py-2 px-3 rounded-lg bg-white text-blue-700 shadow-sm transition';
+                btnCloud.className = 'flex-1 py-2 px-3 rounded-lg text-gray-600 hover:text-gray-800 transition';
+                updateSettingsCloudNotice();
+            }
+        }
+
+        // Menampilkan informasi apakah tombol Simpan akan menuju Cloud atau Lokal
+        function updateSettingsCloudNotice() {
+            const notice = document.getElementById('settings-cloud-notice');
+            const pinBox = document.getElementById('admin-pin-box');
+            const saveLabel = document.getElementById('btn-save-label');
+            const apiUrl = getActiveCloudUrl();
+
+            if (apiUrl) {
+                notice.className = 'p-3 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 text-xs flex items-start space-x-2.5';
+                notice.innerHTML = `<i class="fas fa-cloud-upload-alt text-emerald-600 mt-0.5 text-sm"></i><div><b>Mode Cloud Aktif:</b> Perubahan yang Anda simpan akan langsung dikirim ke <b>Google Sheets</b> dan otomatis tampil di semua HP & laptop.</div>`;
+                pinBox.classList.remove('hidden');
+                saveLabel.textContent = 'Simpan ke Cloud (Semua Perangkat)';
+            } else {
+                notice.className = 'p-3 rounded-xl border bg-amber-50 border-amber-200 text-amber-800 text-xs flex items-start space-x-2.5';
+                notice.innerHTML = `<i class="fas fa-exclamation-triangle text-amber-600 mt-0.5 text-sm"></i><div><b>Mode Lokal:</b> URL Google Apps Script belum diisi, sehingga perubahan hanya tersimpan di perangkat ini. Buka tab <b>Cloud Google Sheets</b> untuk mengaktifkan sinkronisasi semua perangkat.</div>`;
+                pinBox.classList.add('hidden');
+                saveLabel.textContent = 'Simpan Lokal';
+            }
+        }
+
+        // Simpan URL Cloud sementara & tes koneksi
+        async function saveAndTestCloudUrl() {
+            const urlInput = document.getElementById('input-cloud-url').value.trim();
+            if (!urlInput || !urlInput.startsWith('https://script.google.com/')) {
+                showToast("Masukkan URL Web App Google Apps Script yang valid (diawali https://script.google.com/).", "error");
+                return;
+            }
+            try {
+                localStorage.setItem('portal_ujian_cloud_url', urlInput);
+            } catch (e) {
+                console.warn(e);
+            }
+            updateSettingsCloudNotice();
+            await syncFromCloud(true);
+        }
+
+        // Salin Kode Google Apps Script ke Clipboard
+        async function copyAppsScriptCode() {
+            try {
+                await navigator.clipboard.writeText(APPS_SCRIPT_TEMPLATE);
+                showToast("Kode Google Apps Script berhasil disalin ke clipboard!", "success");
+            } catch (err) {
+                // Fallback jika clipboard API diblokir
+                const temp = document.createElement('textarea');
+                temp.value = APPS_SCRIPT_TEMPLATE;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                showToast("Kode Google Apps Script berhasil disalin!", "success");
             }
         }
 
@@ -1057,7 +1459,6 @@
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
         }
@@ -1084,7 +1485,7 @@
 
         // Quick edit trigger
         function quickEditLink(key) {
-            openSettingsModal();
+            openSettingsModal('links');
             setTimeout(() => {
                 const targetInput = document.getElementById(`input-link-${key}`);
                 if (targetInput) {
@@ -1100,7 +1501,6 @@
             const selectedKelas = document.getElementById('filter-kelas').value || 'semua';
             const data = ANALYTICS_DATA[selectedKelas] || ANALYTICS_DATA['semua'];
 
-            // 1. Update KPI Text
             document.getElementById('kpi-total-siswa').textContent = data.totalSiswa;
             document.getElementById('kpi-rata-rata').textContent = data.rataRata;
             document.getElementById('kpi-ketuntasan').textContent = data.ketuntasan;
@@ -1108,10 +1508,8 @@
             document.getElementById('kpi-max').textContent = `Max: ${data.maxScore}`;
             document.getElementById('kpi-min').textContent = `Min: ${data.minScore}`;
 
-            // 2. Chart Mapel (Bar Chart)
             const ctxMapel = document.getElementById('chart-mapel').getContext('2d');
             if (chartMapelInstance) chartMapelInstance.destroy();
-            
             chartMapelInstance = new Chart(ctxMapel, {
                 type: 'bar',
                 data: {
@@ -1146,10 +1544,8 @@
                 }
             });
 
-            // 3. Chart Predikat (Doughnut Chart)
             const ctxPredikat = document.getElementById('chart-predikat').getContext('2d');
             if (chartPredikatInstance) chartPredikatInstance.destroy();
-
             chartPredikatInstance = new Chart(ctxPredikat, {
                 type: 'doughnut',
                 data: {
@@ -1170,10 +1566,8 @@
                 }
             });
 
-            // 4. Chart Kehadiran (Line Chart)
             const ctxKehadiran = document.getElementById('chart-kehadiran').getContext('2d');
             if (chartKehadiranInstance) chartKehadiranInstance.destroy();
-
             chartKehadiranInstance = new Chart(ctxKehadiran, {
                 type: 'line',
                 data: {
@@ -1200,10 +1594,8 @@
                 }
             });
 
-            // 5. Chart Kesukaran Soal (Bar)
             const ctxKesukaran = document.getElementById('chart-kesukaran').getContext('2d');
             if (chartKesukaranInstance) chartKesukaranInstance.destroy();
-
             chartKesukaranInstance = new Chart(ctxKesukaran, {
                 type: 'bar',
                 data: {
@@ -1225,17 +1617,14 @@
                 }
             });
 
-            // Render Table
             renderAnalyticsTable(selectedKelas);
         }
 
-        // Render analytics table rows
         function renderAnalyticsTable(selectedKelas) {
             const tbody = document.getElementById('table-analytics-body');
             tbody.innerHTML = '';
 
             const kelasList = selectedKelas === 'semua' ? ['7', '8', '9'] : [selectedKelas];
-            
             kelasList.forEach(k => {
                 const dataK = ANALYTICS_DATA[k];
                 const tr = document.createElement('tr');
@@ -1261,7 +1650,6 @@
             });
         }
 
-        // Trigger filter refresh
         function updateDashboardAnalytics(showToastNotice = false) {
             initOrUpdateCharts();
             if (showToastNotice) {
@@ -1290,9 +1678,8 @@
             }, 300);
         }
 
-        // Modal Handlers: Settings / Edit Links
-        function openSettingsModal() {
-            // Fill current values in form
+        // Modal Handlers: Settings / Edit Links / Cloud
+        function openSettingsModal(defaultTab = 'links') {
             document.getElementById('input-school-name').value = currentConfig.schoolName;
             document.getElementById('input-slogan').value = currentConfig.slogan;
             document.getElementById('input-logo-url').value = currentConfig.logoUrl;
@@ -1307,6 +1694,10 @@
             document.getElementById('input-link-k7').value = l.k7;
             document.getElementById('input-link-k8').value = l.k8;
             document.getElementById('input-link-k9').value = l.k9;
+
+            // Isi URL Cloud aktif
+            document.getElementById('input-cloud-url').value = getActiveCloudUrl();
+            switchSettingsTab(defaultTab);
 
             const modal = document.getElementById('settings-modal');
             const content = document.getElementById('settings-modal-content');
@@ -1327,44 +1718,106 @@
             }, 300);
         }
 
-        // Save Settings to LocalStorage
-        function savePortalSettings(e) {
+        // Simpan Pengaturan ke Cloud Google Sheets (POST) + Cache LocalStorage
+        async function savePortalSettings(e) {
             e.preventDefault();
 
-            currentConfig.schoolName = document.getElementById('input-school-name').value.trim();
-            currentConfig.slogan = document.getElementById('input-slogan').value.trim();
-            currentConfig.logoUrl = document.getElementById('input-logo-url').value.trim();
-
-            currentConfig.links = {
-                jadwal: document.getElementById('input-link-jadwal').value.trim(),
-                kartu: document.getElementById('input-link-kartu') ? document.getElementById('input-link-kartu').value.trim() : (currentConfig.links.kartu || ''),
-                token: document.getElementById('input-link-token').value.trim(),
-                pengawas: document.getElementById('input-link-pengawas').value.trim(),
-                peserta: document.getElementById('input-link-peserta').value.trim(),
-                berita: document.getElementById('input-link-berita').value.trim(),
-                k7: document.getElementById('input-link-k7').value.trim(),
-                k8: document.getElementById('input-link-k8').value.trim(),
-                k9: document.getElementById('input-link-k9').value.trim(),
+            const newConfig = {
+                schoolName: document.getElementById('input-school-name').value.trim(),
+                slogan: document.getElementById('input-slogan').value.trim(),
+                logoUrl: document.getElementById('input-logo-url').value.trim(),
+                links: {
+                    jadwal: document.getElementById('input-link-jadwal').value.trim(),
+                    kartu: document.getElementById('input-link-kartu') ? document.getElementById('input-link-kartu').value.trim() : (currentConfig.links.kartu || ''),
+                    token: document.getElementById('input-link-token').value.trim(),
+                    pengawas: document.getElementById('input-link-pengawas').value.trim(),
+                    peserta: document.getElementById('input-link-peserta').value.trim(),
+                    berita: document.getElementById('input-link-berita').value.trim(),
+                    k7: document.getElementById('input-link-k7').value.trim(),
+                    k8: document.getElementById('input-link-k8').value.trim(),
+                    k9: document.getElementById('input-link-k9').value.trim(),
+                }
             };
 
+            const apiUrl = getActiveCloudUrl();
+            const saveBtn = document.getElementById('btn-save-settings');
+            const saveLabel = document.getElementById('btn-save-label');
+
+            // Jika Cloud Aktif, kirim ke Google Sheets via Apps Script
+            if (apiUrl) {
+                const pin = document.getElementById('input-admin-pin').value.trim();
+                if (!pin) {
+                    showToast("Masukkan PIN Admin terlebih dahulu untuk menyimpan ke Google Sheets.", "error");
+                    document.getElementById('input-admin-pin').focus();
+                    return;
+                }
+
+                saveBtn.disabled = true;
+                saveBtn.classList.add('opacity-70', 'cursor-not-allowed');
+                saveLabel.textContent = 'Menyimpan ke Cloud...';
+                setCloudStatusUI('syncing', 'Menyimpan...');
+
+                try {
+                    // Menggunakan text/plain agar bebas dari CORS preflight (OPTIONS) di Google Apps Script
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify({
+                            pin: pin,
+                            config: newConfig
+                        }),
+                        redirect: 'follow'
+                    });
+
+                    const result = await response.json();
+                    if (result.status !== 'success') {
+                        throw new Error(result.message || 'Gagal menyimpan ke Google Sheets');
+                    }
+
+                    currentConfig = newConfig;
+                    try {
+                        localStorage.setItem('portal_ujian_config', JSON.stringify(currentConfig));
+                    } catch (err) {
+                        console.warn(err);
+                    }
+                    applyConfigToDOM();
+                    setCloudStatusUI('connected', 'Cloud Aktif');
+                    closeSettingsModal();
+                    showToast("Tersimpan ke Google Sheets! Perubahan langsung aktif di semua HP & laptop.", "success");
+                } catch (err) {
+                    console.error(err);
+                    setCloudStatusUI('error', 'Gagal Simpan');
+                    showToast(err.message || "Gagal menyimpan ke Google Sheets. Periksa PIN & koneksi internet.", "error");
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    updateSettingsCloudNotice();
+                }
+                return;
+            }
+
+            // Fallback: Simpan hanya di LocalStorage jika Cloud belum dihubungkan
+            currentConfig = newConfig;
             try {
                 localStorage.setItem('portal_ujian_config', JSON.stringify(currentConfig));
                 applyConfigToDOM();
                 closeSettingsModal();
-                showToast("Pengaturan portal dan tautan berhasil disimpan!", "success");
+                showToast("Disimpan lokal di perangkat ini. Hubungkan Google Sheets agar berubah di semua perangkat.", "info");
             } catch (err) {
                 showToast("Gagal menyimpan pengaturan ke memori browser", "error");
             }
         }
 
-        // Reset to Default Configuration
+        // Reset ke Default Configuration (Lokal)
         function resetDefaultSettings() {
             currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
             try {
                 localStorage.removeItem('portal_ujian_config');
                 applyConfigToDOM();
                 closeSettingsModal();
-                showToast("Tautan portal dikembalikan ke setelan awal pabrik.", "info");
+                showToast("Tampilan dikembalikan ke tautan bawaan (klik Simpan ke Cloud jika ingin menimpa Google Sheets).", "info");
             } catch (e) {
                 console.error(e);
             }
@@ -1377,13 +1830,12 @@
             
             for (let i = 0; i < rows.length; i++) {
                 let row = [], cols = rows[i].querySelectorAll("td, th");
-                for (let j = 0; j < cols.length - 1; j++) { // exclude action column
+                for (let j = 0; j < cols.length - 1; j++) {
                     row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
                 }
                 csv.push(row.join(","));
             }
 
-            // Download CSV
             const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
             const downloadLink = document.createElement("a");
             downloadLink.download = filename;
@@ -1415,8 +1867,8 @@
                 icon = "fa-info-circle";
             }
 
-            toast.className = `${bgClass} px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-medium transform transition-all duration-300 translate-y-[-10px] opacity-0 pointer-events-auto`;
-            toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+            toast.className = `${bgClass} px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 text-xs font-medium transform transition-all duration-300 translate-y-[-10px] opacity-0 pointer-events-auto max-w-sm`;
+            toast.innerHTML = `<i class="fas ${icon} flex-shrink-0"></i><span>${message}</span>`;
             
             container.appendChild(toast);
 
@@ -1427,7 +1879,7 @@
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-[-10px]');
                 setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            }, 4000);
         }
 
         // Set dynamic Indonesian date format
